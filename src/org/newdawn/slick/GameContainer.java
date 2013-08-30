@@ -299,18 +299,18 @@ public abstract class GameContainer implements GUIContext {
 	 * 
 	 * @return The build number of slick
 	 */
-	public static int getBuildVersion() {
+	public static String getBuildVersion() {
 		try {
 			Properties props = new Properties();
 			props.load(ResourceLoader.getResourceAsStream("version"));
 			
-			int build = Integer.parseInt(props.getProperty("build"));
+			String build = props.getProperty("build");
 			Log.info("Slick Build #"+build);
 			
 			return build;
 		} catch (Exception e) {
 			Log.error("Unable to determine Slick build number");
-			return -1;
+			return "";
 		}
 	}
 	

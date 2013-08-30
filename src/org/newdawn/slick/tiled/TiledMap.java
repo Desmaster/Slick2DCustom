@@ -103,8 +103,7 @@ public class TiledMap {
 	public TiledMap(String ref, boolean loadTileSets) throws SlickException {
 		this.loadTileSets = loadTileSets;
 		ref = ref.replace('\\', '/');
-		load(ResourceLoader.getResourceAsStream(ref),
-				ref.substring(0, ref.lastIndexOf("/")));
+		load(ResourceLoader.getResourceAsStream(ref), ref.substring(0, ref.lastIndexOf("/")));
 	}
 
 	/**
@@ -144,8 +143,7 @@ public class TiledMap {
 	 * @throws SlickException
 	 *             Indicates a failure to load the tilemap
 	 */
-	public TiledMap(InputStream in, String tileSetsLocation)
-			throws SlickException {
+	public TiledMap(InputStream in, String tileSetsLocation) throws SlickException {
 		load(in, tileSetsLocation);
 	}
 
@@ -177,6 +175,25 @@ public class TiledMap {
 			}
 		}
 
+		return -1;
+	}
+
+	/**
+	 * Get the index of the object layer with given name
+	 * 
+	 * @param name
+	 *            The name of the object layer to search for
+	 * @return The index of the object layer or -1 if there is no object layer with given name
+	 */
+	public int getObjectLayerIndex(String name) {
+		for (int i = 0; i < objectGroups.size(); i++) {
+			ObjectGroup group = (ObjectGroup) objectGroups.get(i);
+			
+			if (group.name.equals(name)) {
+				return i;
+			}
+		}
+		
 		return -1;
 	}
 
@@ -310,8 +327,7 @@ public class TiledMap {
 	 * @return The value assigned to the property on the layer (or the default
 	 *         value if none is supplied)
 	 */
-	public String getLayerProperty(int layerIndex, String propertyName,
-			String def) {
+	public String getLayerProperty(int layerIndex, String propertyName, String def) {
 		Layer layer = (Layer) layers.get(layerIndex);
 		if (layer == null || layer.props == null)
 			return def;
@@ -414,15 +430,13 @@ public class TiledMap {
 	 *            to render something else between lines (@see
 	 *            {@link #renderedLine(int, int, int)}
 	 */
-	public void render(int x, int y, int sx, int sy, int width, int height,
-			int l, boolean lineByLine) {
+	public void render(int x, int y, int sx, int sy, int width, int height, int l, boolean lineByLine) {
 		Layer layer = (Layer) layers.get(l);
 
 		switch (orientation) {
 		case ORTHOGONAL:
 			for (int ty = 0; ty < height; ty++) {
-				layer.render(x, y, sx, sy, width, ty, lineByLine, tileWidth,
-						tileHeight);
+				layer.render(x, y, sx, sy, width, ty, lineByLine, tileWidth, tileHeight);
 			}
 			break;
 		case ISOMETRIC:
@@ -453,15 +467,13 @@ public class TiledMap {
 	 *            to render something else between lines (@see
 	 *            {@link #renderedLine(int, int, int)}
 	 */
-	public void render(int x, int y, int sx, int sy, int width, int height,
-			boolean lineByLine) {
+	public void render(int x, int y, int sx, int sy, int width, int height, boolean lineByLine) {
 		switch (orientation) {
 		case ORTHOGONAL:
 			for (int ty = 0; ty < height; ty++) {
 				for (int i = 0; i < layers.size(); i++) {
 					Layer layer = (Layer) layers.get(i);
-					layer.render(x, y, sx, sy, width, ty, lineByLine,
-							tileWidth, tileHeight);
+					layer.render(x, y, sx, sy, width, ty, lineByLine, tileWidth, tileHeight);
 				}
 			}
 			break;
@@ -499,8 +511,7 @@ public class TiledMap {
 	 *            TODO: [Isometric map] Render stuff between lines, concept of
 	 *            line differs from ortho maps
 	 */
-	protected void renderIsometricMap(int x, int y, int sx, int sy, int width,
-			int height, Layer layer, boolean lineByLine) {
+	protected void renderIsometricMap(int x, int y, int sx, int sy, int width, int height, Layer layer, boolean lineByLine) {
 		ArrayList drawLayers = layers;
 		if (layer != null) {
 			drawLayers = new ArrayList();
@@ -525,20 +536,14 @@ public class TiledMap {
 
 			int min = 0;
 			if (height > width)
-				min = (startLineTileY < width - 1) ? startLineTileY : (width
-						- currentTileX < height) ? width - currentTileX - 1
-						: width - 1;
+				min = (startLineTileY < width - 1) ? startLineTileY : (width - currentTileX < height) ? width - currentTileX - 1 : width - 1;
 			else
-				min = (startLineTileY < height - 1) ? startLineTileY : (width
-						- currentTileX < height) ? width - currentTileX - 1
-						: height - 1;
+				min = (startLineTileY < height - 1) ? startLineTileY : (width - currentTileX < height) ? width - currentTileX - 1 : height - 1;
 
 			for (int burner = 0; burner <= min; currentTileX++, currentTileY--, burner++) {
 				for (int layerIdx = 0; layerIdx < drawLayers.size(); layerIdx++) {
 					Layer currentLayer = (Layer) drawLayers.get(layerIdx);
-					currentLayer.render(currentLineX, initialLineY,
-							currentTileX, currentTileY, 1, 0, lineByLine,
-							tileWidth, tileHeight);
+					currentLayer.render(currentLineX, initialLineY, currentTileX, currentTileY, 1, 0, lineByLine, tileWidth, tileHeight);
 				}
 				currentLineX += tileWidth;
 
@@ -571,8 +576,8 @@ public class TiledMap {
 	public int getTileLayerCount() {
 		return layers.size();
 	}
-	
-	/** 
+
+	/**
 	 * Retrieve a count of the numer of object layers available
 	 * 
 	 * @return The number of object layers available in this map
@@ -606,20 +611,16 @@ public class TiledMap {
 	 * @throws SlickException
 	 *             Indicates a failure to parse the map or find a tileset
 	 */
-	private void load(InputStream in, String tileSetsLocation)
-			throws SlickException {
+	private void load(InputStream in, String tileSetsLocation) throws SlickException {
 		tilesLocation = tileSetsLocation;
 
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setValidating(false);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			builder.setEntityResolver(new EntityResolver() {
-				public InputSource resolveEntity(String publicId,
-						String systemId) throws SAXException, IOException {
-					return new InputSource(
-							new ByteArrayInputStream(new byte[0]));
+				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+					return new InputSource(new ByteArrayInputStream(new byte[0]));
 				}
 			});
 
@@ -642,11 +643,9 @@ public class TiledMap {
 			tileHeight = parseInt(docElement.getAttribute("tileheight"));
 
 			// now read the map properties
-			Element propsElement = (Element) docElement.getElementsByTagName(
-					"properties").item(0);
+			Element propsElement = (Element) docElement.getElementsByTagName("properties").item(0);
 			if (propsElement != null) {
-				NodeList properties = propsElement
-						.getElementsByTagName("property");
+				NodeList properties = propsElement.getElementsByTagName("property");
 				if (properties != null) {
 					props = new Properties();
 					for (int p = 0; p < properties.getLength(); p++) {
@@ -689,8 +688,7 @@ public class TiledMap {
 			}
 
 			// acquire object-groups
-			NodeList objectGroupNodes = docElement
-					.getElementsByTagName("objectgroup");
+			NodeList objectGroupNodes = docElement.getElementsByTagName("objectgroup");
 
 			for (int i = 0; i < objectGroupNodes.getLength(); i++) {
 				Element current = (Element) objectGroupNodes.item(i);
@@ -964,8 +962,7 @@ public class TiledMap {
 	 * @return The value of the property with the given name or def, if there is
 	 *         no property with that name.
 	 */
-	public String getObjectProperty(int groupID, int objectID,
-			String propertyName, String def) {
+	public String getObjectProperty(int groupID, int objectID, String propertyName, String def) {
 		if (groupID >= 0 && groupID < objectGroups.size()) {
 			ObjectGroup grp = (ObjectGroup) objectGroups.get(groupID);
 			if (objectID >= 0 && objectID < grp.objects.size()) {
@@ -1019,11 +1016,9 @@ public class TiledMap {
 			objects = new ArrayList();
 
 			// now read the layer properties
-			Element propsElement = (Element) element.getElementsByTagName(
-					"properties").item(0);
+			Element propsElement = (Element) element.getElementsByTagName("properties").item(0);
 			if (propsElement != null) {
-				NodeList properties = propsElement
-						.getElementsByTagName("property");
+				NodeList properties = propsElement.getElementsByTagName("property");
 				if (properties != null) {
 					props = new Properties();
 					for (int p = 0; p < properties.getLength(); p++) {
@@ -1088,18 +1083,15 @@ public class TiledMap {
 			width = Integer.parseInt(element.getAttribute("width"));
 			height = Integer.parseInt(element.getAttribute("height"));
 
-			Element imageElement = (Element) element.getElementsByTagName(
-					"image").item(0);
+			Element imageElement = (Element) element.getElementsByTagName("image").item(0);
 			if (imageElement != null) {
 				image = imageElement.getAttribute("source");
 			}
 
 			// now read the layer properties
-			Element propsElement = (Element) element.getElementsByTagName(
-					"properties").item(0);
+			Element propsElement = (Element) element.getElementsByTagName("properties").item(0);
 			if (propsElement != null) {
-				NodeList properties = propsElement
-						.getElementsByTagName("property");
+				NodeList properties = propsElement.getElementsByTagName("property");
 				if (properties != null) {
 					props = new Properties();
 					for (int p = 0; p < properties.getLength(); p++) {
