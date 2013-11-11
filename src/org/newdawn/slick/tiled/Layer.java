@@ -214,8 +214,12 @@ public class Layer {
 						set.tiles.startUse();
 					}
 
-					int sheetX = set.getTileX(data[sx + tx][sy + ty][1]);
-					int sheetY = set.getTileY(data[sx + tx][sy + ty][1]);
+                    int tileid = getTileRealID(data[sx + tx][sy + ty][1]);    // TODO add methoud.
+                    int rotation = getTileRotation(data[sx + tx][sy + ty][1]);//
+
+
+					int sheetX = set.getTileX(data[sx + tx][sy + ty][1]); // TODO Tile ID !!!!!!!!!
+					int sheetY = set.getTileY(data[sx + tx][sy + ty][1]); // TODO Tile ID !!!!!!!!!
 
 					int tileOffsetY = set.tileHeight - mapTileHeight;
 
@@ -241,7 +245,25 @@ public class Layer {
 		}
 	}
 
-	/**
+    private int getTileRotation(int i) {
+        int HORIZONTAL_FLAG = 0x80000000;
+        int VERTICAL_FLAG = 0x40000000;
+        int DIAGONAL_FLAG = 0x20000000;
+
+        boolean HORIZONTAL_FLIP = ((i & HORIZONTAL_FLAG) == HORIZONTAL_FLAG);
+        boolean VERTICAL_FLIP = ((i & VERTICAL_FLAG) == VERTICAL_FLAG);
+        boolean DIAGONAL_FLIP = ((i & DIAGONAL_FLAG) == DIAGONAL_FLAG);
+
+        System.out.println("Hor:" + HORIZONTAL_FLIP + "ver:" + VERTICAL_FLIP + "dia:" + DIAGONAL_FLIP);
+
+        return 0;
+    }
+
+    private int getTileRealID(int i) {
+        return 0x1FFFFFFF&i;
+    }
+
+    /**
 	 * Decode a Base64 string as encoded by TilED
 	 * 
 	 * @param data
