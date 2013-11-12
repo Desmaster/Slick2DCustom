@@ -267,6 +267,23 @@ public class SpriteSheet extends Image {
 	public void renderInUse(int x,int y,int sx,int sy) {
 		subImages[sx][sy].drawEmbedded(x, y, tw, th);
 	}
+	
+	/**
+	 * Render a sprite when this sprite sheet is in use. 
+	 * 
+	 * @see #startUse()
+	 * @see #endUse()
+	 * 
+	 * @param x The x position to render the sprite at
+	 * @param y The y position to render the sprite at 
+	 * @param sx The x location of the cell to render
+	 * @param sy The y location of the cell to render
+	 * @param angle The angle of the image
+	 */
+	public void renderInUse(int x,int y,int sx,int sy,int angle) {
+		subImages[sx][sy].setRotation(angle);
+		subImages[sx][sy].drawEmbedded(x, y, tw, th);
+	}
 
 	/**
 	 * @see org.newdawn.slick.Image#endUse()

@@ -569,6 +569,12 @@ public class Image implements Renderable {
 	 */
 	public void drawEmbedded(float x,float y,float width,float height) {
 		init();
+			
+		if (angle != 0) {
+	        GL.glTranslatef(centerX, centerY, 0.0f); 
+	        GL.glRotatef(angle, 0.0f, 0.0f, 1.0f); 
+	        GL.glTranslatef(-centerX, -centerY, 0.0f); 
+        }
 		
 		if (corners == null) {
 		    GL.glTexCoord2f(textureOffsetX, textureOffsetY);
